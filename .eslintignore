@@ -1,0 +1,4 @@
+coverage/*
+integration-test/*
+node_modules/*
+test/*

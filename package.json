@@ -1,0 +1,39 @@
+{
+  "name": "address-location",
+  "version": "1.0.0",
+  "description": "Support for addresses",
+  "main": "index.js",
+  "engines": {
+    "node": ">=6"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "coverage": "istanbul cover -x test/**/*.spec*.js ./node_modules/mocha/bin/_mocha -- test/**/*.spec.js",
+    "lint": "eslint lib",
+    "mocha": "mocha",
+    "test": "mocha test/**/*.spec.js --recursive --check-leaks --reporter min"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dennoa/address-location.git"
+  },
+  "author": "dennoa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dennoa/address-location/issues"
+  },
+  "homepage": "https://github.com/dennoa/address-location#readme",
+  "dependencies": {
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.0",
+    "eslint": "^3.19.0",
+    "eslint-plugin-node": "^4.2.3",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.4.2",
+    "sinon": "^2.3.8"
+  }
+}
