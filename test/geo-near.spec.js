@@ -7,18 +7,17 @@ const geoNear = require('../lib').geoNear;
 
 describe('geo-near', () => {
   const expectedError = 'Expected for testing';
-  let options, model, instance;
+  let options, model;
 
   beforeEach(() => {
-    options = { location: { lat: 1, lng: 1 } };
     model = { aggregate: sinon.stub().yields(expectedError) };
-    instance = geoNear(model);
+    options = { model, location: { lat: 1, lng: 1 } };
   });
 
   it('should use the $geoNear aggregation for the search', done => {
     const expectedResults = [{ _id: '1' }];
     model.aggregate.yields(null, expectedResults);
-    instance(options).then(results => {
+    geoNear(options).then(results => {
       expect(results).to.deep.equal(expectedResults);
       expect(model.aggregate.firstCall.args[0]).to.deep.equal([{
         $geoNear: {
@@ -37,7 +36,7 @@ describe('geo-near', () => {
   it('should allow the max distance to be specified', done => {
     model.aggregate.yields(null, []);
     options.maxDistance = 10;
-    instance(options).then(results => {
+    geoNear(options).then(results => {
       expect(model.aggregate.firstCall.args[0][0].$geoNear.maxDistance).to.equal(options.maxDistance);
       done();
     });
@@ -46,7 +45,7 @@ describe('geo-near', () => {
   it('should allow the limit to be specified', done => {
     model.aggregate.yields(null, []);
     options.limit = 1;
-    instance(options).then(results => {
+    geoNear(options).then(results => {
       expect(model.aggregate.firstCall.args[0][0].$geoNear.limit).to.equal(options.limit);
       done();
     });
@@ -55,7 +54,7 @@ describe('geo-near', () => {
   it('should allow the query to be specified', done => {
     model.aggregate.yields(null, []);
     options.query = { id: '1' };
-    instance(options).then(results => {
+    geoNear(options).then(results => {
       expect(model.aggregate.firstCall.args[0][0].$geoNear.query).to.deep.equal(options.query);
       done();
     });
