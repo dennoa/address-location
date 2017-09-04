@@ -23,7 +23,7 @@ describe('timezone', () => {
   it('should lookup timezone information', done => {
     const location = { lat: -33.8571965, lng: 151.2151398 };
     const atDate = new Date();
-    timezone(options).lookup(location, atDate).then(data => {
+    timezone(options).find(location, atDate).then(data => {
       expect(data).to.deep.equal(result);
       expect(googleApi.request.firstCall.args[0]).to.deep.equal({
         method: 'GET',
@@ -37,7 +37,7 @@ describe('timezone', () => {
   it('should default to the current time', done => {
     const location = { lat: -33.8571965, lng: 151.2151398 };
     const now = new Date();
-    timezone(options).lookup(location).then(() => {
+    timezone(options).find(location).then(() => {
       expect(googleApi.request.firstCall.args[0].qs.timestamp).to.be.closeTo(Math.round(now.getTime()/1000), 2);
       done();
     });
@@ -46,28 +46,28 @@ describe('timezone', () => {
   it('should allow the default timezone url to be overridden', done => {
     const location = { lat: -33.8571965, lng: 151.2151398 };
     options.url = 'http://some-other-url';
-    timezone(options).lookup(location).then(() => {
+    timezone(options).find(location).then(() => {
       expect(googleApi.request.firstCall.args[0].url).to.equal('http://some-other-url');
       done();
     });
   });
 
   it('should return a null timezoneId when no location is specified', done => {
-    timezone(options).lookup().then(data => {
+    timezone(options).find().then(data => {
       expect(data).to.deep.equal({ timeZoneId: null });
       done();
     });
   });
 
   it('should return a null timezoneId when no latitude is specified', done => {
-    timezone(options).lookup({ lng: 1 }).then(data => {
+    timezone(options).find({ lng: 1 }).then(data => {
       expect(data).to.deep.equal({ timeZoneId: null });
       done();
     });
   });
 
   it('should return a null timezoneId when no longitude is specified', done => {
-    timezone(options).lookup({ lat: 1 }).then(data => {
+    timezone(options).find({ lat: 1 }).then(data => {
       expect(data).to.deep.equal({ timeZoneId: null });
       done();
     });
@@ -75,7 +75,7 @@ describe('timezone', () => {
 
   it('should reject on any error', done => {
     googleApi.request.returns(unhandledReject(expectedError));
-    timezone(options).lookup({ lat: -33.8571965, lng: 151.2151398 }).catch(err => {
+    timezone(options).find({ lat: -33.8571965, lng: 151.2151398 }).catch(err => {
       expect(err).to.equal(expectedError);
       done();
     });

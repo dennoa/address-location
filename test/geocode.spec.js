@@ -22,7 +22,7 @@ describe('geocode', () => {
 
   it('should lookup address geocode information', done => {
     const address = '123 Fake St';
-    geocode(options).lookup(address).then(data => {
+    geocode(options).find(address).then(data => {
       expect(data).to.deep.equal(result);
       expect(googleApi.request.firstCall.args[0]).to.deep.equal({
         method: 'GET',
@@ -36,7 +36,7 @@ describe('geocode', () => {
   it('should allow the default geocode url to be overridden', done => {
     const address = '123 Fake St';
     options.url = 'http://some-other-url';
-    geocode(options).lookup(address).then(() => {
+    geocode(options).find(address).then(() => {
       expect(googleApi.request.firstCall.args[0].url).to.equal('http://some-other-url');
       done();
     });
@@ -44,7 +44,7 @@ describe('geocode', () => {
 
   it('should reject on any error', done => {
     googleApi.request.returns(unhandledReject(expectedError));
-    geocode(options).lookup('123 Fake St').catch(err => {
+    geocode(options).find('123 Fake St').catch(err => {
       expect(err).to.equal(expectedError);
       done();
     });
