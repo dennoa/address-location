@@ -18,35 +18,38 @@ Use the schema as part of yoor mongoose schema definition.
 
 You can then do $geoNear aggregations like this:
 
-    const options = { model, location: { lat: -33.8571965, lng: 151.2151398 } };
-    addressLocation.geoNear(options).then(results => {
+    const conditions = { location: { lat: -33.8571965, lng: 151.2151398 } };
+    addressLocation.geoNear({ model }).find(conditions).then(results => {
       // results is an array of documents from the model collection
     });
 
 ### geoNear options
 
 * model is required. It is the mongoose model with a 2dsphere index (coordinates) that can be used with the $geoNear aggregation.
+
+### geoNear conditions
+
 * location specifies the lat/lng at the center of the search. It defaults to 0, 0.
 * maxDistance specifies the maximum distance in metres from the location. It defaults to 100.
 * limit specifies the maximum number of documents to retrieve. It defaults to 20.
 * query specifies other conditions to be applied to the match. It defaults to {}.
 
 ## Geocode
-Use the google geocode api to lookup an address. You are probably going to do this from the browser, but if you need to do it from Node then you can use:
+Use the google geocode api to find an address. You are probably going to do this from the browser, but if you need to do it from Node then you can use:
 
-    addressLocation.geocode({ key: 'your api key' }).lookup('some address').then(data => {
+    addressLocation.geocode({ key: 'your api key' }).find('some address').then(data => {
       // data is from the google api and contains results[] and status
     });
 
 ## Timezone
-Use the google timezone api to lookup timezone information for an address or location.
+Use the google timezone api to find timezone information for an address or location.
 
-    addressLocation.timezone({ key: 'your api key' }).lookup({ lat: -33.8571965, lng: 151.2151398 }).then(data => {
+    addressLocation.timezone({ key: 'your api key' }).find({ lat: -33.8571965, lng: 151.2151398 }).then(data => {
       // data is from the google api and contains the timezoneId for the address (plus some other stuff)
     });
 
     // address must be in addressLocation.address.schema format - the lat/lng will be extracted from it for the timezone lookup
-    addressLocation.timezone({ key: 'your api key' }).lookup(address).then(data => {
+    addressLocation.timezone({ key: 'your api key' }).find(address).then(data => {
       // data is from the google api and contains the timezoneId for the address (plus some other stuff)
     });
 
